@@ -104,13 +104,13 @@ bluesScale =  foldr1 (:+:) [ro 4 qn, mt 4 qn, fo 4 qn, fi 4 qn, ms 4 qn, ro 5 qn
 
 -- Ex 3.12
 --
-mkScale :: Pitch -> [Int] -> Music Pitch
-mkScale p ints = line $ map (note qn) pitches
+mkScale :: Pitch -> [Int] -> [Music Pitch]
+mkScale p ints = map (note qn) pitches
   where prefix (mp:mps) i = pitch (absPitch mp + i):mp:mps
         pitches = reverse $ foldl prefix [p] ints
 
 -- Ex 3.13
-genScale :: Pitch -> Mode -> Music Pitch
+genScale :: Pitch -> Mode -> [Music Pitch]
 genScale p mode = mkScale p intervals
   where intervals = rotate [2, 2, 1, 2, 2, 2, 1] (i mode)
         rotate xs n = take (length xs) . drop n $ cycle xs
@@ -125,3 +125,18 @@ genScale p mode = mkScale p intervals
         i Locrian = 6
         i (CustomMode _)  = error "CutomMode not implmentd"
 
+
+prefixes :: [a] -> [[a]]
+prefixes [] = []
+prefixes (x:xs) = [x]:map (x:) (prefixes xs)
+
+
+prefix :: [Music a] -> Music a
+prefix mel =
+  let line1 = instrument midi1 . line . concat . prefixes $ mel
+      line2 = instrument midi2 . transpose 12 . line . concat . prefixes . reverse $ mel
+      m = line1 :=: line2
+  in m :+: transpose 5 m :+: m
+
+mel1 =[c 5 en, e 5 sn, g 5 en, b 5 sn, a 5 en, f 5 sn, d 5 en, b 4 sn, c 5 en]
+mel2 =[c 5 sn, e 5 sn, g 5 sn, b 5 sn, a 5 sn, f 5 sn, d 5 sn, b 4 sn, c 5 sn]
