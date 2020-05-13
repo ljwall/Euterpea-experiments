@@ -6,28 +6,8 @@ import Data.List (sort)
 import Data.Maybe (mapMaybe)
 
 canonicalPitchClass :: PitchClass -> PitchClass
-canonicalPitchClass Cff = As
-canonicalPitchClass Cf = B
-canonicalPitchClass Dff = C
-canonicalPitchClass Df = Cs
-canonicalPitchClass Css = D
-canonicalPitchClass Eff = D
-canonicalPitchClass Ef = Ds
-canonicalPitchClass Fff = Ds
-canonicalPitchClass Dss = E
-canonicalPitchClass Ff = E
-canonicalPitchClass Gff = E
-canonicalPitchClass Ess = G
-canonicalPitchClass Gf = Es
-canonicalPitchClass Fss = G
-canonicalPitchClass Aff = G
-canonicalPitchClass Af = Gs
-canonicalPitchClass Gss = A
-canonicalPitchClass Bff = A
-canonicalPitchClass Bf = As
-canonicalPitchClass Ass = B
-canonicalPitchClass Bss = Cs
-canonicalPitchClass x = x
+canonicalPitchClass p = fst . pitch . absPitch $ (p, 4)
+
 
 --properRow :: Music Pitch -> Bool
 properRow music =
