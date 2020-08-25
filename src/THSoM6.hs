@@ -9,7 +9,7 @@ canonicalPitchClass :: PitchClass -> PitchClass
 canonicalPitchClass p = fst . pitch . absPitch $ (p, 4)
 
 
---properRow :: Music Pitch -> Bool
+properRow :: Music Pitch -> Bool
 properRow music =
   let line = lineToList music
       toPitchMaybe (Prim (Note _ p)) = Just p
